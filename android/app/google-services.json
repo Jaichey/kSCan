@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "638145567351",
+    "project_id": "kscan-c620d",
+    "storage_bucket": "kscan-c620d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638145567351:android:f7a8188b374776490b4472",
+        "android_client_info": {
+          "package_name": "com.example.kscan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638145567351-5r1aoe41lnvjglsjccohjmqefhedvnhg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiUlQSS8uBcGbT2OZ3wKuodcC-d6eLcvw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638145567351-5r1aoe41lnvjglsjccohjmqefhedvnhg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "638145567351-8n14q9nhidj3mqpi3an8k30voif7gre7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.kscan"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
