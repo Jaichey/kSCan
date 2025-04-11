@@ -266,8 +266,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 mainAxisAlignment:
                     MainAxisAlignment.center, // Center the buttons
                 children: [
+                  const SizedBox(height: 30),
+
                   SizedBox(
-                    width: 150, // Half the width since both buttons should fit
+                    width: 50,
                     height: 50,
                     child: ElevatedButton(
                       onPressed:
@@ -285,29 +287,21 @@ class _MyHomePageState extends State<MyHomePage> {
                                 }
                               },
                       style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white, // Text color
-                        backgroundColor: Colors.blue, // Button background color
+                        padding: EdgeInsets.zero,
+                        backgroundColor: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                            10,
+                          ), // Optional rounded corners
+                        ),
                       ),
-                      child: const Text("Save & Next"),
-                    ),
-                  ),
-                  const SizedBox(width: 10), // Space between buttons
-                  SizedBox(
-                    width: 150,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed:
-                          () => Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const EducationDetails(),
-                            ),
-                          ),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white, // Text color
-                        backgroundColor: Colors.blue, // Button background color
+                      child: Center(
+                        child: Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          color: Colors.white,
+                          size: 24, // Adjust icon size if needed
+                        ),
                       ),
-                      child: const Text("Next"),
                     ),
                   ),
                 ],
@@ -321,7 +315,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _buildTextField(TextEditingController controller, String label) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 5), // Reduce padding
       child: TextFormField(
         controller: controller,
         decoration: InputDecoration(
@@ -329,6 +323,7 @@ class _MyHomePageState extends State<MyHomePage> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
+          contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         ),
         validator:
             (value) => value!.isEmpty ? "Please enter your $label" : null,
@@ -348,7 +343,9 @@ class _MyHomePageState extends State<MyHomePage> {
         readOnly: true,
         decoration: InputDecoration(
           labelText: label,
-          border: OutlineInputBorder(),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
           suffixIcon: IconButton(
             icon: const Icon(Icons.calendar_today),
             onPressed: () async {
@@ -379,12 +376,20 @@ class _MyHomePageState extends State<MyHomePage> {
     ValueChanged<String?> onChanged,
   ) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(
+        vertical: 5,
+      ), // Reduce padding slightly
       child: DropdownButtonFormField<String>(
         value: selectedValue,
         decoration: InputDecoration(
           labelText: label,
-          border: OutlineInputBorder(),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 15,
+            horizontal: 15,
+          ), // Maintain height
         ),
         items:
             items.map((item) {
