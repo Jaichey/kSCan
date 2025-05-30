@@ -1,10 +1,18 @@
+//Created by Dhanunjai on 23-02-2025
+
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'login_page.dart';
-import 'educationDetails.dart';
+import 'package:kscan/profile.dart';
+import 'education_details.dart';
+import 'feedback_screen.dart';
+import 'help_faq_screen.dart';
+import 'contact_us_screen.dart';
+import 'about_us_screen.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -13,7 +21,8 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
 
   final nameController = TextEditingController();
@@ -22,6 +31,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final motherNameController = TextEditingController();
   final contactController = TextEditingController();
   final addressController = TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late AnimationController _iconAnimationController;
 
   String? selectedNationality;
   String? selectedCategory;
@@ -48,14 +59,21 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   @override
+  @override
   void initState() {
     super.initState();
     dobController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
     _fetchUserData();
+
+    _iconAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
   }
 
   @override
   void dispose() {
+    _iconAnimationController.dispose();
     nameController.dispose();
     dobController.dispose();
     fatherNameController.dispose();
@@ -75,6 +93,8 @@ class _MyHomePageState extends State<MyHomePage> {
               .collection("applications")
               .where("userId", isEqualTo: user.uid)
               .get();
+
+      if (!mounted) return; // <-- Add this check here
 
       if (querySnapshot.docs.isNotEmpty) {
         var data = querySnapshot.docs.first.data() as Map<String, dynamic>;
@@ -136,6 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
             "category": selectedCategory,
             "nationality": selectedNationality,
             "userId": user.uid,
+            "email": user.email,
           });
         }
 
@@ -191,19 +212,115 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      onDrawerChanged: (isOpened) {
+        if (isOpened) {
+          _iconAnimationController.forward();
+        } else {
+          _iconAnimationController.reverse();
+        }
+      },
       appBar: AppBar(
-        title: const Text("Application Form"),
-        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: AnimatedIcon(
+            icon: AnimatedIcons.menu_close,
+            progress: _iconAnimationController,
+          ),
+          onPressed: () {
+            if (_scaffoldKey.currentState!.isDrawerOpen) {
+              Navigator.of(context).pop(); // Close drawer
+            } else {
+              _scaffoldKey.currentState!.openDrawer(); // Open drawer
+            }
+          },
+        ),
+        title: const Text("kSCan"),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed:
-                () => Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
-                ),
+            icon: const Icon(Icons.account_circle),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProfileScreen()),
+              );
+            },
           ),
         ],
+      ),
+      drawer: Drawer(
+        child: Stack(
+          children: [
+            ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                DrawerHeader(
+                  decoration: BoxDecoration(color: Colors.blue),
+                  child: Text(
+                    'Menu',
+                    style: TextStyle(color: Colors.white, fontSize: 24),
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(Icons.feedback),
+                  title: Text('Feedback'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => FeedbackScreen()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.help_outline),
+                  title: Text('Help & FAQs'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HelpFaqScreen()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.contact_phone),
+                  title: Text('Contact Us'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ContactUsScreen(),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.info_outline),
+                  title: Text('About Us'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AboutUsScreen()),
+                    );
+                  },
+                ),
+                SizedBox(height: 80),
+              ],
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                color: Colors.black,
+                padding: EdgeInsets.symmetric(vertical: 12),
+                alignment: Alignment.center,
+                child: Text(
+                  '© 2025 kSCan',
+                  style: TextStyle(color: Colors.white54, fontSize: 16),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10.0),
@@ -211,6 +328,13 @@ class _MyHomePageState extends State<MyHomePage> {
           key: _formKey,
           child: Column(
             children: [
+              Center(
+                child: Text(
+                  "Application Form",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: 20),
               SizedBox(
                 width: 300,
                 height: 70,
@@ -262,44 +386,46 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               const SizedBox(height: 20),
+
               Row(
                 mainAxisAlignment:
                     MainAxisAlignment.center, // Center the buttons
                 children: [
-                  const SizedBox(height: 30),
-
-                  SizedBox(
-                    width: 50,
-                    height: 50,
-                    child: ElevatedButton(
-                      onPressed:
-                          isSaving
-                              ? null
-                              : () async {
-                                if (await _saveData()) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder:
-                                          (context) => const EducationDetails(),
-                                    ),
-                                  );
-                                }
-                              },
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        backgroundColor: Colors.blue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            10,
-                          ), // Optional rounded corners
+                  const SizedBox(width: 235),
+                  Transform.translate(
+                    offset: Offset(0, -10),
+                    child: SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed:
+                            isSaving
+                                ? null
+                                : () async {
+                                  if (await _saveData()) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) =>
+                                                const EducationDetails(),
+                                      ),
+                                    );
+                                  }
+                                },
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          backgroundColor: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          color: Colors.white,
-                          size: 24, // Adjust icon size if needed
+                        child: Center(
+                          child: Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            color: Colors.white,
+                            // Adjust icon size if needed
+                          ),
                         ),
                       ),
                     ),
@@ -322,6 +448,10 @@ class _MyHomePageState extends State<MyHomePage> {
           labelText: label,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Colors.blue, width: 2.0),
           ),
           contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         ),
@@ -346,8 +476,15 @@ class _MyHomePageState extends State<MyHomePage> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(
+              color: Colors.blue, // Blue border when focused
+              width: 2.0,
+            ),
+          ),
           suffixIcon: IconButton(
-            icon: const Icon(Icons.calendar_today),
+            icon: const Icon(Icons.calendar_month_outlined),
             onPressed: () async {
               DateTime? pickedDate = await showDatePicker(
                 context: context,
@@ -385,6 +522,13 @@ class _MyHomePageState extends State<MyHomePage> {
           labelText: label,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(12)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(
+              color: Colors.blue, // Blue border when focused
+              width: 2.0,
+            ),
           ),
           contentPadding: EdgeInsets.symmetric(
             vertical: 15,

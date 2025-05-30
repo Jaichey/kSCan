@@ -17,3 +17,9 @@ samples, guidance on mobile development, and a full API reference.
 
 ##To build apps for all architecture
 flutter build apk --debug --split-per-abi
+
+##To build for specific version
+flutter build apk --debug --split-per-abi --target-platform=android-arm64
+
+##To create new launcher Icon
+flutter pub run flutter_launcher_icons:main
