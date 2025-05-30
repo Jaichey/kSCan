@@ -1,6 +1,6 @@
 # kscan
 
-A new Flutter project.
+A new Flutter project from team #111(KMIT).
 
 ## Getting Started
 
