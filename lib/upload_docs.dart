@@ -173,6 +173,9 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
     required String documentId,
   }) async {
     try {
+      // final uri = Uri.parse(
+      //   "https://kscan-backend.onrender.com/upload-and-verify",
+      // );
       final uri = Uri.parse("http://127.0.0.1:5000/upload-and-verify");
       final request = http.MultipartRequest('POST', uri);
       request.fields['uid'] = uid;
@@ -189,9 +192,9 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
         if (extraImageBytes != null) {
           request.files.add(
             http.MultipartFile.fromBytes(
-              'extraImage',
+              'face',
               extraImageBytes,
-              filename: "extra_$fileName",
+              filename: "face_$fileName",
             ),
           );
         }
@@ -290,7 +293,13 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
       }
 
       final user = FirebaseAuth.instance.currentUser;
-      if (user == null) return;
+      if (user == null) {
+        showError(
+          "Please Login to submit files",
+          "assets/animations/error.json",
+        );
+        return;
+      }
 
       final documentId = await getDocumentId(user.uid);
       if (documentId == null) {
@@ -321,6 +330,7 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
         );
 
         if (result != null) {
+          result["docType"] = file["docType"];
           allResults.add(result);
         }
 
@@ -334,7 +344,11 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ReportPageMulti(results: allResults),
+            builder:
+                (context) => ReportPageMulti(
+                  results: allResults,
+                  documentType: allResults[0]['docType'].toUpperCase(),
+                ),
           ),
         );
       } else {

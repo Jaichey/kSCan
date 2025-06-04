@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kscan/profile.dart';
+import 'package:kscan/upload_docs.dart';
 import 'education_details.dart';
 import 'feedback_screen.dart';
 import 'help_faq_screen.dart';
@@ -408,7 +409,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       MaterialPageRoute(
                                         builder:
                                             (context) =>
-                                                const EducationDetails(),
+                                                const DocumentUploadScreen(),
                                       ),
                                     );
                                   }

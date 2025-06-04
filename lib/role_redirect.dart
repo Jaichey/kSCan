@@ -27,7 +27,12 @@ class RoleBasedRedirectPage extends StatelessWidget {
 
         if (snapshot.hasError) {
           return Scaffold(
-            body: Center(child: Text('Error: ${snapshot.error}')),
+            body: Center(
+              child: Text(
+                'Error: ${snapshot.error}',
+                style: TextStyle(decoration: TextDecoration.none),
+              ),
+            ),
           );
         }
         final isAdmin =
