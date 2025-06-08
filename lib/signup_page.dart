@@ -107,13 +107,14 @@ class _SignUpPageState extends State<SignUpPage> with TickerProviderStateMixin {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Transform.translate(
-          offset: Offset(0, -55),
-          child: Padding(
-            padding: EdgeInsets.only(top: 5),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             child: Form(
               key: formKey,
               child: Column(
@@ -122,25 +123,18 @@ class _SignUpPageState extends State<SignUpPage> with TickerProviderStateMixin {
                   // Logo Animation
                   FadeTransition(
                     opacity: _logoAnimation,
-                    child: Flexible(
-                      child: Image.asset(
-                        'assets/images/kSCan_Loading_Login.gif',
-                        width: 280,
-                      ),
+                    child: Image.asset(
+                      'assets/images/kSCan_Loading_Login.gif',
+                      width: 200,
                     ),
                   ),
                   // Title Text
-                  Transform.translate(
-                    offset: Offset(0, -18),
-                    child: const Text(
-                      'Sign Up',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Sign Up',
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 16),
                   // Form Fields with Slide In Animation
                   SlideTransition(
                     position: _formAnimation,
@@ -148,7 +142,7 @@ class _SignUpPageState extends State<SignUpPage> with TickerProviderStateMixin {
                       children: [
                         // Email Field
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 8),
                           child: SizedBox(
                             width: 300,
                             height: 60,
@@ -180,10 +174,9 @@ class _SignUpPageState extends State<SignUpPage> with TickerProviderStateMixin {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 10),
                         // Password Field
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 8),
                           child: SizedBox(
                             width: 300,
                             height: 60,
@@ -210,7 +203,6 @@ class _SignUpPageState extends State<SignUpPage> with TickerProviderStateMixin {
                                         ? Icons.visibility
                                         : Icons.visibility_off,
                                   ),
-
                                   onPressed: () {
                                     setState(() {
                                       _isPasswordVisible = !_isPasswordVisible;
@@ -241,10 +233,7 @@ class _SignUpPageState extends State<SignUpPage> with TickerProviderStateMixin {
                       ],
                     ),
                   ),
-                  Transform.translate(
-                    offset: Offset(0, -18),
-                    child: const SizedBox(height: 10),
-                  ),
+                  const SizedBox(height: 10),
                   Text(
                     '1.Password must be at least 6 characters long.'
                     '\n2.Contain at least one letter and one number.'

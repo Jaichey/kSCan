@@ -152,7 +152,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     children: [
                       Image.asset(
                         'assets/images/kSCan_Loading_Login.gif',
-                        width: 280,
+                        width: 200,
                       ),
                       const SizedBox(height: 10),
                       const Text(
@@ -240,7 +240,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                               onTap:
                                   () => Navigator.pushReplacement(
                                     context,
-                                    SignUpPage.route(),
+                                    MaterialPageRoute(
+                                      builder: (context) => const SignUpPage(),
+                                    ),
                                   ),
                               child: const Text(
                                 'Sign Up',

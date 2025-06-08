@@ -173,10 +173,10 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
     required String documentId,
   }) async {
     try {
-      // final uri = Uri.parse(
-      //   "https://kscan-backend.onrender.com/upload-and-verify",
-      // );
-      final uri = Uri.parse("http://127.0.0.1:5000/upload-and-verify");
+      final uri = Uri.parse(
+        "https://kscan-backend.onrender.com/upload-and-verify",
+      );
+      // final uri = Uri.parse("http://127.0.0.1:5000/upload-and-verify");
       final request = http.MultipartRequest('POST', uri);
       request.fields['uid'] = uid;
       request.fields['docType'] = docType;
@@ -479,11 +479,11 @@ class _DocumentUploadScreenState extends State<DocumentUploadScreen> {
                                                   'aadhaar',
                                                   'pan',
                                                   'passport',
-                                                  'license',
+                                                  'driving_license',
                                                   'bonafide',
-                                                  'caste',
-                                                  'tc',
-                                                  'marksheet',
+                                                  'caste_certificate',
+                                                  'voter_id',
+                                                  'income_certificate',
                                                 ]
                                                 .map(
                                                   (type) => DropdownMenuItem(
